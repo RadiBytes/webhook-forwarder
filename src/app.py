@@ -5,49 +5,45 @@ from flask import Flask, request
 app = Flask(__name__)
 
 
-class Webhook_obj:
+class _Webhook_obj:
     '''store webhook'''
 
     def __init__(self) -> None:
         self.saved_webhook = ''
+        self.subdir = ""
+
+    def add_subdir(self, text: str):
+        self.subdir = text.strip('/')
+
+    def set_new_webhook(self, text: str):
+        self.saved_webhook = text
 
 
-webhook = Webhook_obj()
+webhook = _Webhook_obj()
 # '/'->(post) endpoint to receive webhook from wa
 
 
-@app.route('/', methods=['POST', 'GET'])
-def getMessage():
+@app.route('/'+webhook.subdir, methods=['POST', 'GET'])
+def forward_message():
     update = request
-    # Dispatcher.process_update(update)
-    requests.post(get_webhook(), data=update)
+    # send response to saved webhook
+    requests.post(webhook.saved_webhook, data=update)
     return "running", 200
 
-# '/create-webhook'-> (post) endpoint to receive webhook
-# '/delete-webhook'->(post) endpoint to delete current webhook
 
-
+@app.route('/delete_webhook')
 def delete_webhook():
-    pass
+    webhook.set_new_webhook("")
 
 
-def create_webhook(url):
-    delete_webhook()
-    # create
-
-
-def get_webhook() -> str:
-    # fetch saved webhook
-    res = webhook.saved_webhook  # fetched hook
-    return res
-
-# for "/":
-
-
-def forward_webhook():
-    wbhk = get_webhook()
-    # requests.post(wbhk,data=response
-    return 200  # status
+@app.route('/set_webhook', methods=['POST', 'GET'])
+def set_webhook():
+    update = request.get_json(force=True)
+    try:
+        webhook_url = update[""]
+        webhook.set_new_webhook(webhook_url)
+    except:
+        return "Could not set webhook_url", 402
 
 
 # In client
