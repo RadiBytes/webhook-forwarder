@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 class _Webhook_obj:
-    '''store webhook'''
+    '''Initialize webhook settings'''
 
     def __init__(self) -> None:
         self.webhook_url = ''
@@ -16,6 +16,13 @@ class _Webhook_obj:
 
     def add_subdir(self, text: str):
         self.subdir = text.strip('/')
+
+    def run(self):
+        print(f"""***** Running Webhook Forwarder *****
+    Receivning at: /{self.subdir}
+    Forwarding to: {self.webhook_url}""")
+        app.run(debug=self.debug, host="0.0.0.0",
+                port=int(self.port) if self.port else 80)
 
 
 webhook = _Webhook_obj()
@@ -63,8 +70,3 @@ if __name__ == "__main__":
     Forwarding to: {webhook.webhook_url}""")
     app.run(debug=webhook.debug, host="0.0.0.0",
             port=int(webhook.port) if webhook.port else 80)
-
-# In client
-# On app run:
-# ___update webhook
-#   requests.post(forwarder_url/create_webhook, data=(new_webhook))
