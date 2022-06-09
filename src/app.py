@@ -9,14 +9,13 @@ class _Webhook_obj:
     '''store webhook'''
 
     def __init__(self) -> None:
-        self.saved_webhook = ''
+        self.webhook_url = ''
         self.subdir = ""
+        self.debug = True
+        self.port = 80
 
     def add_subdir(self, text: str):
         self.subdir = text.strip('/')
-
-    def set_new_webhook(self, text: str):
-        self.saved_webhook = text
 
 
 webhook = _Webhook_obj()
@@ -25,26 +24,45 @@ webhook = _Webhook_obj()
 
 @app.route('/'+webhook.subdir, methods=['POST', 'GET'])
 def forward_message():
-    update = request
     # send response to saved webhook
-    requests.post(webhook.saved_webhook, data=update)
-    return "running", 200
+    if request.method == "POST":
+        update = request.get_json(force=True)
+        print(update)
+        try:
+            requests.post(webhook.webhook_url, data=update)
+        except:
+            print("Forward not successful")
+    print(f"running, {webhook.webhook_url}, {webhook.subdir}")
+    return f"running, {webhook.webhook_url}, {webhook.subdir}, {webhook.port}", 200
 
 
 @app.route('/delete_webhook')
 def delete_webhook():
-    webhook.set_new_webhook("")
+    webhook.webhook_url = ""
+    return "success", 200
 
 
-@app.route('/set_webhook', methods=['POST', 'GET'])
+@app.route('/setwebhook', methods=['POST', 'GET'])
 def set_webhook():
-    update = request.get_json(force=True)
-    try:
-        webhook_url = update[""]
-        webhook.set_new_webhook(webhook_url)
-    except:
-        return "Could not set webhook_url", 402
+    if request.method == "POST":
+        update = request.get_json(force=True)
+        try:
+            _webhook_url = update["webhook_url"]
+            webhook.webhook_url = _webhook_url
+            return "set webhook success", 200
+        except:
+            return "Could not set webhook_url", 402
+    return "set webhook url", 200
 
+
+webhook.webhook_url = "ra"
+
+if __name__ == "__main__":
+    print(f"""***************** Running Webhook Forwarder *****************
+    Receivning at: /{webhook.subdir}
+    Forwarding to: {webhook.webhook_url}""")
+    app.run(debug=webhook.debug, host="0.0.0.0",
+            port=int(webhook.port) if webhook.port else 80)
 
 # In client
 # On app run:
