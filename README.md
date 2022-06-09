@@ -1,4 +1,4 @@
-# A webhook forwarding client based on Python.
+# A webhook forwarding client based on Python
 
 ## Example usecase
 
