@@ -74,5 +74,4 @@ if __name__ == "__main__":
     print(f"""***************** Running Webhook Forwarder *****************
     Receivning at: /{webhook.subdir}
     Forwarding to: {webhook.webhook_url}""")
-    app.run(debug=webhook.debug, host="0.0.0.0",
-            port=int(webhook.port) if webhook.port else 80)
+    app.run(debug=webhook.debug, host="0.0.0.0")
