@@ -23,8 +23,7 @@ class _Webhook_obj:
             print(f"""***** Running Webhook Forwarder *****
         Receivning at: /{self.subdir}
         Forwarding to: {self.webhook_url}""")
-            app.run(debug=self.debug, host="0.0.0.0",
-                    port=int(self.port) if self.port else 80)
+            app.run(debug=self.debug, host="0.0.0.0")
         else:
             print(f"""***** Running Webhook Forwarder *****
         Receivning at: /{self.subdir}
