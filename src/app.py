@@ -1,6 +1,7 @@
 # setup flask
 import requests
 from flask import Flask, request
+from waitress import serve
 
 app = Flask(__name__)
 
@@ -18,11 +19,17 @@ class _Webhook_obj:
         self.subdir = text.strip('/')
 
     def run(self):
-        print(f"""***** Running Webhook Forwarder *****
-    Receivning at: /{self.subdir}
-    Forwarding to: {self.webhook_url}""")
-        app.run(debug=self.debug, host="0.0.0.0",
-                port=int(self.port) if self.port else 80)
+        if self.debug:
+            print(f"""***** Running Webhook Forwarder *****
+        Receivning at: /{self.subdir}
+        Forwarding to: {self.webhook_url}""")
+            app.run(debug=self.debug, host="0.0.0.0",
+                    port=int(self.port) if self.port else 80)
+        else:
+            print(f"""***** Running Webhook Forwarder *****
+        Receivning at: /{self.subdir}
+        Forwarding to: {self.webhook_url}""")
+        serve(app, host='0.0.0.0', port=int(self.port) if self.port else 80)
 
 
 webhook = _Webhook_obj()
