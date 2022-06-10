@@ -44,7 +44,7 @@ webhook = _Webhook_obj()
 def forward_message():
     # send response to saved webhook
     if request.method == "POST":
-        update = request  # .get_json(force=True)
+        update = request.data  # .get_json(force=True)
         args = update
         try:
             requests.post(webhook._webhook_forward_url, data=update)
