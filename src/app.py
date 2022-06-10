@@ -43,13 +43,15 @@ def forward_message():
     # send response to saved webhook
     if request.method == "POST":
         update = request.get_json(force=True)
-        print(update)
-        try:
-            requests.post(webhook.webhook_url, data=update)
-        except:
-            print("Forward not successful")
-    print(f"running, {webhook.webhook_url}, {webhook.subdir}")
-    return f"running, {webhook.webhook_url}, {webhook.subdir}, {webhook.port}", 200
+        # Dispatcher.process_update(update)
+        # delete()
+        args = update
+    try:
+        args = request.args.to_dict()
+        args = args["hub.challenge"]  # Used for whatsapp api webhooksetup
+    except KeyError:
+        args = "Running, no args"
+    return args, 200
 
 
 @app.route('/delete_webhook')
