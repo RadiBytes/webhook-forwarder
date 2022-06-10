@@ -1,7 +1,10 @@
 # setup flask
+import os
 import requests
 from flask import Flask, request
 from waitress import serve
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -74,4 +77,4 @@ if __name__ == "__main__":
     print(f"""***************** Running Webhook Forwarder *****************
     Receivning at: /{webhook.subdir}
     Forwarding to: {webhook.webhook_url}""")
-    app.run(debug=webhook.debug, host="0.0.0.0")
+    app.run(debug=webhook.debug, host="0.0.0.0", port=os.getenv("PORT"))
