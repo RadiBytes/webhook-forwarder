@@ -3,8 +3,7 @@ import os
 import requests
 from flask import Flask, request
 from waitress import serve
-from dotenv import load_dotenv
-load_dotenv()
+
 
 app = Flask(__name__)
 
@@ -13,10 +12,11 @@ class _Webhook_obj:
     '''Initialize webhook settings'''
 
     def __init__(self) -> None:
-        self.webhook_url = ''
-        self.subdir = ""
+        self.webhook_url: str = ''
+        self.subdir: str = ""
+        # set to "hub.challenge" for whatsapp api webhooksetup
+        self.verify_query_key: str = ""
         self.debug = True
-        self.port = 80
 
     def add_subdir(self, text: str):
         self.subdir = text.strip('/')
@@ -26,12 +26,12 @@ class _Webhook_obj:
             print(f"""***** Running Webhook Forwarder *****
         Receivning at: /{self.subdir}
         Forwarding to: {self.webhook_url}""")
-            app.run(debug=self.debug, host="0.0.0.0")
+            app.run(debug=self.debug, host="0.0.0.0", port=os.getenv("PORT"))
         else:
             print(f"""***** Running Webhook Forwarder *****
         Receivning at: /{self.subdir}
         Forwarding to: {self.webhook_url}""")
-        serve(app, host='0.0.0.0', port=int(self.port) if self.port else 80)
+        serve(app, host='0.0.0.0', port=os.getenv("PORT"))
 
 
 webhook = _Webhook_obj()
@@ -46,12 +46,13 @@ def forward_message():
         args = update
         try:
             requests.post(webhook.webhook_url, data=update)
+            print("sent to", webhook.webhook_url)
         except:
             print("Forward not successful")
     else:
         try:
             args = request.args.to_dict()
-            args = args["hub.challenge"]  # Used for whatsapp api webhooksetup
+            args = args[str(webhook.verify_query_key)]
         except KeyError:
             args = "Running, no args"
     return args, 200
@@ -79,7 +80,13 @@ def set_webhook():
 webhook.webhook_url = "ra"
 
 if __name__ == "__main__":
-    print(f"""***************** Running Webhook Forwarder *****************
-    Receivning at: /{webhook.subdir}
-    Forwarding to: {webhook.webhook_url}""")
-    app.run(debug=webhook.debug, host="0.0.0.0", port=os.getenv("PORT"))
+    if webhook.debug:
+        print(f"""***** Running Webhook Forwarder *****
+        Receivning at: /{webhook.subdir}
+        Forwarding to: {webhook.webhook_url}""")
+        app.run(debug=webhook.debug, host="0.0.0.0", port=os.getenv("PORT"))
+    else:
+        print(f"""***** Running Webhook Forwarder *****
+        Receivning at: /{webhook.subdir}
+        Forwarding to: {webhook.webhook_url}""")
+        serve(app, host='0.0.0.0', port=os.getenv("PORT"))
