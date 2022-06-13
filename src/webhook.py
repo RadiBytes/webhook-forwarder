@@ -73,10 +73,10 @@ def set_webhook():
         try:
             _webhook_forward_url = update["webhook_url"]
             webhook._webhook_forward_url = _webhook_forward_url
-            return "set webhook success", 200
+            return f"set webhook success to {webhook._webhook_forward_url}", 200
         except:
             return "Could not set _webhook_forward_url", 402
-    return "set webhook url", 200
+    return f"webhook url is {webhook._webhook_forward_url}", 200
 
 
 if __name__ == "__main__":
