@@ -47,10 +47,8 @@ webhook = _Webhook_obj()
 def forward_message():
     # send response to saved webhook
     if request.method == "POST":
-        update = json.loads(request.data.decode(
-            'utf-8'))  # .get_json(force=True)
+        update = request.data.decode('utf-8')  # .get_json(force=True)
         args = update
-        print("upd=", update)
         try:
             return requests.post(webhook._webhook_forward_url, data=update).text
             print("sent to", webhook._webhook_forward_url)
