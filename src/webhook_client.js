@@ -30,15 +30,16 @@ const ngrok_url = axios_get("http://localhost:4040/api/tunnels").then(
   (response) => response["tunnels"][0]?.public_url
 );
 
-const update_webhook = async (server_url) => {
+const update_webhook = async (server_url, subpath = "") => {
   /*Use this on target machine(client) to send the current url where all webhhooks should be forwarded to
     Args:
         server_url:str= The base address of where the webhook forwarder is hosted (the permanent url of the hosted server
                         i.e: https://herokuapp.xyzapp.app)to*/
   const webhook_url = await ngrok_url;
-  const payload = JSON.stringify({ webhook_url: webhook_url });
+  const payload = JSON.stringify({
+    webhook_url: webhook_url + "/" + subpath.replace(/^\/|\/$/g, ""),
+  });
   const _url = `${server_url.trim().replace(/\/$/g, "")}/setwebhook`;
-  console.log(_url);
   return axios_post((target_url = _url), (data = payload));
 };
 
