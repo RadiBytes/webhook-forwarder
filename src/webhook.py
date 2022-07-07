@@ -4,6 +4,10 @@ import json
 import requests
 from flask import Flask, request
 from waitress import serve
+from .config import SUBPATH, DEBUG
+
+
+IS_WHATSAPP = True
 
 
 app = Flask(__name__)
@@ -14,10 +18,10 @@ class _Webhook_obj:
 
     def __init__(self) -> None:
         self._webhook_forward_url: str = ''
-        self._subdir: str = ""
+        self._subdir: str = SUBPATH
         # set to "hub.challenge" for whatsapp api webhooksetup
-        self.verify_query_key: str = ""
-        self.debug = True
+        self.verify_query_key: str = "hub.challenge" if IS_WHATSAPP else ''
+        self.debug = DEBUG
 
     def add_subdir(self, text: str):
         self._subdir = text.strip('/')
@@ -54,7 +58,7 @@ def forward_message():
     else:
         try:
             args = request.args.to_dict()
-            args = args[str(webhook.verify_query_key)]
+            args = args[webhook.verify_query_key]
         except KeyError:
             args = "Running, no args"
     return args, 200
