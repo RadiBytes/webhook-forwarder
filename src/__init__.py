@@ -1,1 +1,1 @@
-from webhook_client import update_webhook
+from .webhook_client import update_webhook

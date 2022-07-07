@@ -1,1 +1,1 @@
-from src import update_webhook
+from .src import update_webhook
