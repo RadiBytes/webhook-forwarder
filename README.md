@@ -21,9 +21,11 @@ To use for Whatsapp Business Cloud Api (which is what prompted my to write this 
 ## For Python
 
 4. pip install requests
-5. To update the heroku app with your ngrok url, you need to import the update_webhook function from the cloned directory. e.g from .webhook_forwarder import update_webhook
+5. To update the heroku app with your ngrok url, you need to import the update_webhook function from the cloned directory. e.g from .webhook-forwarder import update_webhook
 6. Call the update_webhook function passing in the url of the deployed heroku app only. Ensure that ngrok is already running at this point.
 
 ## For Node
 
-4.npm install axios 5. To update the heroku app with your ngrok url, you need to import the update_webhook function from the cloned directory. e.g import update_webhook from ./webhook_forwarder or const update_webhook = require("./webhook_forwarder") 6. Call the update_webhook function passing in the url of the deployed heroku app only. Ensure that ngrok is already running at this point.
+4. npm install axios
+5. To update the heroku app with your ngrok url, you need to import the update_webhook function from the cloned directory. e.g import update_webhook from ./webhook-forwarder or const update_webhook = require("./webhook-forwarder")
+6. Call the update_webhook function passing in the url of the deployed heroku app only. Ensure that ngrok is already running at this point.
