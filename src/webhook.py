@@ -1,5 +1,6 @@
 # setup flask
 import os
+import json
 import requests
 from flask import Flask, request
 from waitress import serve
@@ -46,10 +47,12 @@ webhook = _Webhook_obj()
 def forward_message():
     # send response to saved webhook
     if request.method == "POST":
-        update = request  # .get_json(force=True)
+        update = json.loads(request.data.decode(
+            'utf-8'))  # .get_json(force=True)
         args = update
+        print("upd=", update)
         try:
-            requests.post(webhook._webhook_forward_url, data=update)
+            return requests.post(webhook._webhook_forward_url, data=update).text
             print("sent to", webhook._webhook_forward_url)
         except:
             print("Forward not successful")
