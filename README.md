@@ -11,12 +11,13 @@ A good solution is to host this forwarding client on a virtual server (e.g Herok
 
 To use for Whatsapp Business Cloud Api (which is what prompted my to write this script):
 
-1. Deploy this app to heroku as is. If you're not deploying to heroku, then the process might be different.
-   For extra customization such as using a subpath, navigate to src/config.py and edit the SUBPATH variable to the subpath you want to receive your webhooks in.
+1.  Deploy this app to heroku as is by clicking the deploy button below. If you do not want to deploy to heroku, then the process might be different.
+    [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Radi-dev/webhook-forwarder)
+    For extra customization such as using a subpath, navigate to src/config.py and edit the SUBPATH variable to the subpath you want to receive your webhooks in.
 
-2. Use the app's url as your webhook url. e.g https://herokuapp.your-app-name.com
+2.  Use the app's url as your webhook url. e.g https://herokuapp.your-app-name.com
 
-3. Clone this repo to your project directory.
+3.  Clone this repo to your project directory.
 
 ## For Python
 
