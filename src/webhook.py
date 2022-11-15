@@ -51,7 +51,34 @@ def forward_message():
         args = update
         try:
             return requests.post(webhook._webhook_forward_url, data=update).text
-            print("sent to", webhook._webhook_forward_url)
+            # print("sent to", webhook._webhook_forward_url)
+        except:
+            print("Forward not successful")
+    else:
+        try:
+            args = request.args.to_dict()
+            args = args[webhook.verify_query_key]
+        except KeyError:
+            args = "Running, no args"
+    return args, 200
+
+
+@app.route('/webhook', methods=['POST', 'GET'])
+def forward_webhook():
+    # send response to saved webhook
+    if request.method == "POST":
+        riddle = request.headers.get('riddle')
+        print("riddle is",riddle)
+        if not "xypprice__pally2o22__"==riddle:
+            print('failed riddle',riddle)
+            return f"failed riddle {riddle}", 400
+        update = request.data.decode('utf-8')  # .get_json(force=True)
+        args = update
+        # update = json.loads(update)
+
+        try:
+            return requests.post(webhook._webhook_forward_url+"/webhook", data=update).text
+            #print("sent to", webhook._webhook_forward_url)
         except:
             print("Forward not successful")
     else:
