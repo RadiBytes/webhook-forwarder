@@ -86,7 +86,7 @@ def forward_webhook():
             args = request.args.to_dict()
             args = args[webhook.verify_query_key]
         except KeyError:
-            args = "Running, no args"
+            args = "webhook get nothing here"
     return args, 200
 
 
