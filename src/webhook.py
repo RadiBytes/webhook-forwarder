@@ -77,10 +77,12 @@ def forward_webhook():
         # update = json.loads(update)
 
         try:
-            return requests.post(webhook._webhook_forward_url+"/webhook", data=update).text
+            requests.post(webhook._webhook_forward_url+"/webhook", data=update).text
             #print("sent to", webhook._webhook_forward_url)
+            return f"success: forwarded", 200
         except:
             print("Forward not successful")
+            return f"success: Forward not successful ", 200
     else:
         try:
             args = request.args.to_dict()
