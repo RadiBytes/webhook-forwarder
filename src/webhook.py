@@ -50,9 +50,9 @@ def forward_message():
         update = request.data.decode('utf-8')  # .get_json(force=True)
         args = update
         try:
-            return requests.post(webhook._webhook_forward_url, data=update).text
-            # print("sent to", webhook._webhook_forward_url)
-        except:
+            
+            print("sent to", webhook._webhook_forward_url)
+            return requests.post(webhook._webhook_forward_url, data=update).textexcept:
             print("Forward not successful")
     else:
         try:
@@ -78,7 +78,7 @@ def forward_webhook():
 
         try:
             requests.post(webhook._webhook_forward_url+"/webhook", data=update).text
-            #print("sent to", webhook._webhook_forward_url)
+            print("sent to", webhook._webhook_forward_url)
             return f"success: forwarded", 200
         except:
             print("Forward not successful")
@@ -87,6 +87,7 @@ def forward_webhook():
         try:
             args = request.args.to_dict()
             args = args[webhook.verify_query_key]
+            print("challenge is: ",args)
         except KeyError:
             args = "webhook get nothing here"
     return args, 200
@@ -105,8 +106,10 @@ def set_webhook():
         try:
             _webhook_forward_url = update["webhook_url"]
             webhook._webhook_forward_url = _webhook_forward_url
+            print(f"set webhook success to {webhook._webhook_forward_url}")
             return f"set webhook success to {webhook._webhook_forward_url}", 200
         except:
+            print("Could not set _webhook_forward_url")
             return "Could not set _webhook_forward_url", 402
     return f"webhook url is {webhook._webhook_forward_url}", 200
 
