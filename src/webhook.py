@@ -53,7 +53,7 @@ def forward_message():
     if request.method == "POST":
         update = request.data.decode('utf-8')  # .get_json(force=True)
         args = update
-        print("Received:\n", args)
+        print("Received:\n", update.get_json(force=True))
         try:
             print("sent to", webhook.webhook_forward_url)
             return requests.post(webhook.webhook_forward_url, data=update).text
