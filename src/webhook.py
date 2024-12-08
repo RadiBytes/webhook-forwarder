@@ -53,6 +53,7 @@ def forward_message():
     if request.method == "POST":
         update = request.data.decode('utf-8')  # .get_json(force=True)
         args = update
+        print("Received:\n", args)
         try:
             print("sent to", webhook.webhook_forward_url)
             return requests.post(webhook.webhook_forward_url, data=update).text
@@ -64,6 +65,7 @@ def forward_message():
             args = args[webhook.verify_query_key]
         except KeyError:
             args = "Running, no args"
+        print("challenge is: ", args)
     return args, 200
 
 
